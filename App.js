@@ -1,13 +1,20 @@
 import React, {Component, useState} from 'react';
-import {Text, Alert, Button, StyleSheet, View} from 'react-native';
+import {Text, Button, StyleSheet, View, Image} from 'react-native';
 
 export default function App() {
   const [szint, setSzint] = useState(1)
   const [pont, setPont] = useState(1)
   const [kocka, setKocka] = useState(1)
+  const [dobas, setDobas] = useState(1)
+  const [lathatoKocka, setLathatoKocka] = useState(false)
 
-  function onPressButton() {
-    Alert.alert('You tapped the button!');
+  function kockaDobas(){
+    let vel = Math.floor(Math.random() * kocka)+1
+    setLathatoKocka(true)
+    setTimeout(() => {
+      setLathatoKocka(false)
+    }, 1200);
+    setDobas(vel)
   }
 
   return (
@@ -28,8 +35,12 @@ export default function App() {
       </View>
       <View style={[styles.doboz_3, {flex: 3}]}>
         <Text style={{fontSize: 18}}>Kocka oldalszáma:</Text>
-        <View style={styles.gomb}><Button title="+" /></View>
-        <Text style={{fontSize: 18, width: '60%', backgroundColor: 'red', color: 'white'}}>Kocka oldalszáma:</Text>
+        <View style={styles.gomb}><Button onPress={kocka < 20 ? () => setKocka(kocka+1) : null} title="+" /></View>
+        <View style={styles.kocka_doboz}><Text style={{fontSize: 20, color: 'white'}}>{kocka}</Text></View>
+        <View style={styles.gomb}><Button onPress={kocka > 1 ? () => setKocka(kocka-1) : null} title="-" /></View>
+        <View style={{width: '95%', marginVertical: '10%'}}><Button onPress={() => kockaDobas()} title="KOCKADOBÁS" /></View>
+        <Text style={{fontSize: 18}}>Kocka eredménye:</Text>
+        { lathatoKocka ? <Image source={require("./kocka.gif")} style={{width: 50, height: 50}}/> : <Text style={{fontSize: 22, fontWeight: 600}}>{dobas}</Text>}
       </View>
     </View>
   );
@@ -72,6 +83,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: 'gray',
     borderWidth: 1,
+  },
+  kocka_doboz: {
+    backgroundColor: 'rgb(40,90,255)',
+    width: '80%',
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   alternativeLayoutButtonContainer: {
     margin: 20,
